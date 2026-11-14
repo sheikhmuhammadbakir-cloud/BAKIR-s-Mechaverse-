@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0a5f80">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<title>মেকালজি: পরীক্ষা ও পড়াশোনা</title>
+<style>
+:root{--bg:#f4f5fa;--card:#fff;--tx:#1b1f3a;--mu:#6b7090;--pr:#5b4bd5;--ok:#1a9d55;--no:#d33a3a;--bd:#dfe2ee;--hd:#0a5f80;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#10121c;--card:#1a1d2c;--tx:#eceefa;--mu:#9aa0c0;--bd:#2c3048;--hd:#0b4a66}}
+:root[data-theme=dark]{--bg:#10121c;--card:#1a1d2c;--tx:#eceefa;--mu:#9aa0c0;--bd:#2c3048;--hd:#0b4a66}
+*{box-sizing:border-box}html,body{margin:0}
+body{background:var(--bg);color:var(--tx);font-family:"Hind Siliguri","Noto Sans Bengali",system-ui,sans-serif;font-size:16px}
+header{background:var(--hd);color:#fff;padding:14px 16px;display:flex;justify-content:space-between;align-items:center;font-weight:700;font-size:20px}
+header button{background:none;border:0;color:#fff;font-size:20px}
+main{max-width:640px;margin:0 auto;padding:14px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:16px;padding:14px;margin-bottom:12px}
+.hero{background:#151a33;color:#fff;border-radius:20px;padding:18px;margin-bottom:12px}.hero small{color:#b6bbdc}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+label.f{font-size:14px;color:var(--mu);display:block}
+select{width:100%;margin-top:6px;padding:11px;border-radius:12px;border:1px solid var(--bd);background:var(--card);color:var(--tx);font:inherit}
+.row{display:flex;align-items:center;gap:10px;padding:11px 4px;border-bottom:1px solid var(--bd)}.row span{flex:1}.row b{font-size:13px;color:var(--pr);background:rgba(91,75,213,.12);padding:3px 9px;border-radius:99px}
+.row input{width:20px;height:20px}
+.btn{display:block;width:100%;padding:14px;border:0;border-radius:14px;background:var(--pr);color:#fff;font:inherit;font-weight:700;margin-top:10px}
+.btn.g{background:var(--card);color:var(--tx);border:1px solid var(--bd)}
+.opt{display:block;width:100%;text-align:left;padding:12px;margin-top:9px;border-radius:12px;border:1.5px solid var(--bd);background:var(--card);color:var(--tx);font:inherit}
+.opt.sel{border-color:var(--pr);background:rgba(91,75,213,.12)}.opt.ok{border-color:var(--ok);background:rgba(26,157,85,.14)}.opt.no{border-color:var(--no);background:rgba(211,58,58,.14)}
+.top{display:flex;justify-content:space-between;font-weight:700}.tm{color:var(--no)}
+.exp{margin-top:8px;font-size:14px;color:var(--mu);border-left:3px solid var(--pr);padding-left:8px}
+.nav{display:flex;gap:10px}.nav .btn{margin-top:14px}
+.big{font-size:38px;font-weight:800;color:var(--pr);text-align:center}
+.st{display:flex;justify-content:space-around;text-align:center;margin:8px 0}
+.viva-search{width:100%;padding:12px;border:1px solid var(--bd);border-radius:12px;background:var(--card);color:var(--tx);font:inherit;margin:8px 0}
+.viva-cat{width:100%;margin:8px 0;padding:11px;border:1px solid var(--bd);border-radius:12px;background:var(--card);color:var(--tx);font:inherit}
+.viva-item{padding:12px 0;border-bottom:1px solid var(--bd)}
+.viva-item:last-child{border-bottom:0}
+.viva-item summary{font-weight:700;cursor:pointer;line-height:1.65;list-style-position:inside}
+.viva-answer{margin:10px 0 0 0;padding:11px 12px;border-radius:10px;background:rgba(91,75,213,.08);line-height:1.75}
+.viva-note{font-size:14px;line-height:1.7;color:var(--mu)}
+</style>
+</head>
+<body>
+
+<div id="auth-overlay" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); display: flex; justify-content: center; align-items: center; z-index: 99999; font-family: inherit;">
+    <div style="background: var(--card, #fff); color: var(--tx, #000); padding: 25px; border-radius: 16px; width: 90%; max-width: 350px; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.3);">
+        <h3>এক্সেস রিকোয়েস্ট</h3>
+        <p style="font-size: 14px; color: #666; margin-bottom: 15px;">অ্যাপে প্রবেশ করতে আপনার নাম লিখে অনুমতি নিন।</p>
+        <input type="text" id="req-name" placeholder="আপনার নাম লিখুন" style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; margin-bottom: 15px; box-sizing: border-box; font-size: 16px;">
+        <button onclick="sendAccessRequest()" id="req-btn" style="width: 100%; padding: 12px; background: #5b4bd5; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 16px; margin-bottom: 15px;">অনুমোদন চান</button>
+        <div id="otp-box" style="display: none;">
+            <p style="font-size: 14px; color: #666; margin-bottom: 10px;">টেলিগ্রামে পাঠানো ওটিপি কোডটি লিখুন:</p>
+            <input type="text" id="req-otp" placeholder="ওটিপি কোড" style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; margin-bottom: 15px; box-sizing: border-box; font-size: 16px;">
+            <button onclick="verifyAccessOTP()" style="width: 100%; padding: 12px; background: #1a9d55; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 16px;">প্রবেশ করুন</button>
+        </div>
+        <p id="req-status" style="color: #d33a3a; font-size: 13px; margin-top: 10px;"></p>
+    </div>
+</div>
+
+<header><span>BAKIR's Mchaverse</span><button onclick="dk()" aria-label="থিম">◐</button></header>
+<main id="app">
+    <div class="card">
+        <h2>সিস্টেম ড্যাশবোর্ড</h2>
+        <p>সফলভাবে প্রমাণীকরণ সম্পন্ন হয়েছে।</p>
+    </div>
+</main>
+
+<script>
+const WEB_APP_URL = "YOUR_GOOGLE_SHEET_WEB_APP_URL";
+
+function sendAccessRequest() {
+    const name = document.getElementById('req-name').value.trim();
+    if(!name) { alert('নাম লিখুন'); return; }
+    document.getElementById('req-btn').innerText = 'পাঠানো হচ্ছে...';
+    fetch(WEB_APP_URL, {
+        method: 'POST',
+        body: JSON.stringify({action: 'request', name: name})
+    }).then(res => res.json()).then(data => {
+        if(data.status === 'sent') {
+            document.getElementById('req-btn').style.display = 'none';
+            document.getElementById('otp-box').style.display = 'block';
+            document.getElementById('req-status').innerText = 'টেলিগ্রামে ওটিপি পাঠানো হয়েছে। অপেক্ষা করুন।';
+        }
+    }).catch(err => {
+        document.getElementById('req-btn').innerText = 'অনুমোদন চান';
+        alert('ত্রুটি হয়েছে');
+    });
+}
+
+function verifyAccessOTP() {
+    const name = document.getElementById('req-name').value.trim();
+    const otp = document.getElementById('req-otp').value.trim();
+    if(!otp) { alert('ওটিপি দিন'); return; }
+    fetch(WEB_APP_URL, {
+        method: 'POST',
+        body: JSON.stringify({action: 'verify', name: name, otp: otp})
+    }).then(res => res.json()).then(data => {
+        if(data.status === 'valid') {
+            document.getElementById('auth-overlay').style.display = 'none';
+            try { localStorage.setItem('mchaverse_verified', 'true'); } catch(e) {}
+        } else {
+            document.getElementById('req-status').innerText = 'ভুল ওটিপি বা ইতিমধ্যে ব্যবহৃত হয়েছে!';
+        }
+    });
+}
+
+window.onload = function() {
+    try {
+        if(localStorage.getItem('mchaverse_verified') === 'true') {
+            document.getElementById('auth-overlay').style.display = 'none';
+        }
+    } catch(e) {}
+};
+
+function dk() {
+    const root = document.documentElement;
+    const current = root.getAttribute('data-theme');
+    root.setAttribute('data-theme', current === 'dark' ? 'light' : 'dark');
+}
+
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('sw.js').catch(() => {});
+    });
+}
+</script>
+</body>
+</html>
